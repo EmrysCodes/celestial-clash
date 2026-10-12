@@ -1,0 +1,25 @@
+# Godot 4
+.godot/
+*.translation
+export_presets.cfg
+*.apk
+*.aab
+*.ipa
+*.app
+*.x86_64
+*.x86
+*.so
+*.dylib
+*.dll
+.DS_Store
+*~
+*.swp
+.mono/
+data_*/
+.import/
+*.tmp
+agent-tools/
+
+# Local packaging only
+dist/
+*.zip

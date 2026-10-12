@@ -1,0 +1,425 @@
+[gd_scene load_steps=15 format=3 uid="uid://seraphmatch01"]
+
+[ext_resource type="Script" path="res://scripts/match/match_controller.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/match_hud.gd" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="3_touch"]
+[ext_resource type="Script" path="res://scripts/ui/minimap.gd" id="4_mini"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/bottom_bar.png" id="5_bar"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/portrait_frame.png" id="6_pf"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/hp_track.png" id="7_hpt"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/hp_fill.png" id="8_hpf"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/mp_track.png" id="9_mpt"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/mp_fill.png" id="10_mpf"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/resource_chip.png" id="11_chip"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/minimap_frame.png" id="12_mmf"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/gold_icon.png" id="13_gold"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hero_seraph.png" id="14_seraph"]
+
+[node name="Match" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Units" type="Node2D" parent="World"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.8, 0.8)
+position_smoothing_enabled = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("2_hud")
+
+[node name="TopChrome" type="VBoxContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -180.0
+offset_bottom = 190.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+mouse_filter = 2
+
+[node name="Score" type="Label" parent="HUD/TopChrome"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 18
+text = "Seraphim 12   —   Ashen 12"
+horizontal_alignment = 1
+
+[node name="Duel" type="Label" parent="HUD/TopChrome"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 13
+text = "Next duel in 75s"
+horizontal_alignment = 1
+
+[node name="Objective" type="Label" parent="HUD/TopChrome"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.95, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Farm → gear → Mid Boss"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="GoldChip" type="TextureRect" parent="HUD/TopChrome"]
+custom_minimum_size = Vector2(140, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("11_chip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="HUD/TopChrome/GoldChip"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 28.0
+offset_bottom = 28.0
+texture = ExtResource("13_gold")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Gold" type="Label" parent="HUD/TopChrome/GoldChip"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 4.0
+offset_right = 130.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(1, 0.9, 0.45, 1)
+theme_override_font_sizes/font_size = 16
+text = "350"
+vertical_alignment = 1
+
+[node name="Feed" type="Label" parent="HUD/TopChrome"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.65, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="NearShop" type="Label" parent="HUD/TopChrome"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.69, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Shop in range"
+horizontal_alignment = 1
+
+[node name="AscendBtn" type="Button" parent="HUD/TopChrome"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Ascend to God"
+
+[node name="MinimapFrame" type="TextureRect" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 176.0
+grow_horizontal = 0
+texture = ExtResource("12_mmf")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Minimap" type="Control" parent="HUD/MinimapFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_mini")
+
+[node name="BossBar" type="ProgressBar" parent="HUD"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 48.0
+offset_top = 196.0
+offset_right = -48.0
+offset_bottom = 222.0
+grow_horizontal = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="BossLabel" type="Label" parent="HUD/BossBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+text = "MID BOSS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DuelBanner" type="ColorRect" parent="HUD"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 230.0
+offset_bottom = 280.0
+grow_horizontal = 2
+color = Color(0.15, 0.1, 0.05, 0.78)
+
+[node name="Label" type="Label" parent="HUD/DuelBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
+theme_override_font_sizes/font_size = 22
+text = "DUEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -340.0
+offset_right = -12.0
+offset_bottom = -310.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "Joystick or tap ground to move · tap enemy to attack · skills on buttons"
+horizontal_alignment = 1
+autowrap_mode = 2
+mouse_filter = 2
+
+[node name="BottomBar" type="TextureRect" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_bar")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="PortraitFrame" type="TextureRect" parent="HUD/BottomBar"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 118.0
+offset_bottom = 118.0
+texture = ExtResource("6_pf")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Portrait" type="TextureRect" parent="HUD/BottomBar/PortraitFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_seraph")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Info" type="Control" parent="HUD/BottomBar"]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 8.0
+offset_right = 430.0
+offset_bottom = 120.0
+mouse_filter = 2
+
+[node name="HeroName" type="Label" parent="HUD/BottomBar/Info"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0.98, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "Seraph"
+
+[node name="Level" type="Label" parent="HUD/BottomBar/Info"]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 300.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "Lv 1"
+horizontal_alignment = 2
+
+[node name="HpBar" type="TextureProgressBar" parent="HUD/BottomBar/Info"]
+layout_mode = 0
+offset_top = 26.0
+offset_right = 300.0
+offset_bottom = 44.0
+max_value = 100.0
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("7_hpt")
+texture_progress = ExtResource("8_hpf")
+
+[node name="Text" type="Label" parent="HUD/BottomBar/Info/HpBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MpBar" type="TextureProgressBar" parent="HUD/BottomBar/Info"]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 300.0
+offset_bottom = 66.0
+max_value = 100.0
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("9_mpt")
+texture_progress = ExtResource("10_mpf")
+
+[node name="Text" type="Label" parent="HUD/BottomBar/Info/MpBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inventory" type="GridContainer" parent="HUD/BottomBar"]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 72.0
+offset_right = 280.0
+offset_bottom = 120.0
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="TouchControls" parent="HUD" instance=ExtResource("3_touch")]
+
+[node name="ShopPanel" type="PanelContainer" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -280.0
+offset_right = 310.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/ShopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="HUD/ShopPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="HUD/ShopPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Base Shop"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD/ShopPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Base → Mid → Secret (after Mid Boss). Classic Angel Arena gear climb."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="List" type="VBoxContainer" parent="HUD/ShopPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="ResultPanel" type="PanelContainer" parent="HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/ResultPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="HUD/ResultPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Result" type="Label" parent="HUD/ResultPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Victory!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuBtn" type="Button" parent="HUD/ResultPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Main Menu"
